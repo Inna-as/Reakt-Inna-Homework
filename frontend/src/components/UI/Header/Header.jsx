@@ -1,13 +1,8 @@
-import React from 'react';
-import styles from './Header.module.css';
+import styles from './Header.module.css'
 
-const Header = (props) => {
-  return (
-    <header className={styles.header}>
-      <h1>{props.title}</h1>
-      <p>{props.text}</p>
-    </header>
-  );
-};
 
-export default Header;
+const Header = () => {
+    return <header className={styles.header}>Шапка сайта</header>
+}
+
+export default Header

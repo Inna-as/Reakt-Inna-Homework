@@ -1,42 +1,42 @@
 import { useState, useEffect } from 'react'
-import Header from './components/UI/Header/Header'
-import Footer from './components/UI/Header/Footer'
+import axios from 'axios'
+import Header from './components/UI/Header' 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [isFooterVisible, setIsFooterVisible] = useState(true)
+  const [items, setItems] = useState([])
 
   useEffect(() => {
-    alert("Привет!")
+
+    axios.get(`${API_URL}/items`)
+      .then(response => {
+       
+        const data = Array.isArray(response.data) ? response.data : response.data.items;
+        setItems(data || []);
+      })
+      .catch(error => console.error("Ошибка при получении данных:", error))
   }, [])
 
-  const handleDecrement = () => {
-    if (count > 0) {
-      setCount(count - 1)
-    }
-  }
-
   return (
-    <div className="app-container">
-      <Header title="Мой сайт" text="Добро пожаловать!" />
+    <>
+      <Header />
 
-      <main>
-        <h1>Счетчик кликов</h1>
-        <p>Текущее значение: {count}</p>
-        <button onClick={() => setCount(count + 1)}>+1</button>
-        <button onClick={handleDecrement}>-1</button>
-        <button onClick={() => setCount(0)}>Сбросить</button>
-        
-        <br />
-        
-        <button onClick={() => setIsFooterVisible(!isFooterVisible)}>
-          {isFooterVisible ? 'Скрыть футер' : 'Показать футер'}
-        </button>
-      </main>
-
-      {isFooterVisible && <Footer copyright="Мой проект" info="Учебная версия" />}
-    </div>
+      <h1>Список вещей</h1>
+      <ul>
+        {items.length > 0 ? (
+          items.map(item => (
+            <li key={item.id}>
+              <strong>{item.name}</strong>: {item.description} — 
+              <span> {item.isAvailable ? "✅ В наличии" : "❌ Нет в наличии"}</span>
+            </li>
+          ))
+        ) : (
+          <p>Загрузка или список пуст...</p>
+        )}
+      </ul>
+    </>
   )
 }
 
-export default App
+
+export default App 
