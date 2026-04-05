@@ -15,16 +15,44 @@ const ItemList = () => {
     setItems((prev) => [newItem, ...prev])
   }
 
+  const handleUpdateItem = async (id, updatedData) => {
+    try {
+      const response = await axios.patch(`${API_URL}/items/${id}`, updatedData)
+      setItems((prev) => 
+        prev.map((item) => (item.id === id ? { ...item, ...response.data } : item))
+      )
+    } catch (err) {
+      console.error("Ошибка при обновлении:", err)
+      alert("Не удалось обновить данные.")
+    }
+  }
+
+  const handleDeleteItem = async (id) => {
+    if (!window.confirm("Удалить этот автомобиль из гаража?")) return
+
+    try {
+      await axios.delete(`${API_URL}/items/${id}`)
+      setItems((prev) => prev.filter((item) => item.id !== id))
+    } catch (err) {
+      console.error("Ошибка при удалении:", err)
+      alert("Не удалось удалить элемент.")
+    }
+  }
+
   useEffect(() => {
-    axios.get(`${API_URL}/items`)
-      .then(res => {
-        setItems(Array.isArray(res.data) ? res.data : (res.data.items || []))
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const res = await axios.get(`${API_URL}/items`)
+        const data = Array.isArray(res.data) ? res.data : (res.data.items || [])
+        setItems(data)
+      } catch (err) {
+        setError(`Ошибка загрузки: ${err.response?.statusText || err.message}`)
+      } finally {
         setLoading(false)
-      })
-      .catch(err => {
-        setError(err.message)
-        setLoading(false)
-      })
+      }
+    }
+    fetchData()
   }, [])
 
   if (loading) return <div className={styles.loading}>Загрузка...</div>
@@ -40,7 +68,12 @@ const ItemList = () => {
 
       <ul className={styles.list}>
         {items.map(item => (
-          <ItemCard key={item.id || item._id || Math.random()} item={item} />
+          <ItemCard 
+            key={item.id || item._id || Math.random()} 
+            item={item} 
+            onUpdate={handleUpdateItem}
+            onDelete={handleDeleteItem}
+          />
         ))}
       </ul>
     </div>

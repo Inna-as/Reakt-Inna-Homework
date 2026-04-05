@@ -8,9 +8,13 @@ const AddItem = ({ onAdd }) => {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [isAvailable, setIsAvailable] = useState(false)
+    const [isSending, setIsSending] = useState(false)
+    const [error, setError] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsSending(true)
+        setError(null)
         
         try {
             const response = await axios.post(`${API_URL}/items`, { 
@@ -21,18 +25,22 @@ const AddItem = ({ onAdd }) => {
             
             if (onAdd) onAdd(response.data)
 
-            // Сброс формы
             setName("")
             setDescription("")
             setIsAvailable(false)
             
-        } catch (error) {
-            console.error(error)
+        } catch (err) {
+            console.error("Ошибка при создании:", err)
+            setError(`Не удалось создать товар: ${err.message}`)
+        } finally {
+            setIsSending(false)
         }
     }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
+            {error && <div className={styles.errorMessage}>{error}</div>}
+            
             <input 
                 type="text" 
                 placeholder='Название' 
@@ -54,7 +62,10 @@ const AddItem = ({ onAdd }) => {
                 />
                 <label htmlFor='isAvailable'>В наличии?</label>
             </div>
-            <button type='submit'>Добавить</button>
+            
+            <button type='submit' disabled={isSending}>
+                {isSending ? 'Создание...' : 'Добавить'}
+            </button>
         </form>
     )
 }
