@@ -1,8 +1,12 @@
 import styles from './Header.module.css'
 
-
-const Header = () => {
-    return <header className={styles.header}>Шапка сайта</header>
+const Header = ({ logoUrl }) => {
+    return (
+        <header className={styles.header}>
+            <img src={logoUrl} alt="Logo" className={styles.logo} />
+            <span className={styles.title}>Гараж </span>
+        </header>
+    )
 }
 
 export default Header

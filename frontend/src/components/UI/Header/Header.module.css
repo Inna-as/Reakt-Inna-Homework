@@ -18,3 +18,22 @@
     font-style: italic;
     font-size: 0.9rem;
 }
+.header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7); 
+    gap: 15px;
+}
+
+.logo {
+    height: 50px; 
+    width: auto;
+    object-fit: contain;
+}
+
+.title {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
