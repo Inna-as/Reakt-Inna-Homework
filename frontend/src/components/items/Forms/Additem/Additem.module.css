@@ -1,0 +1,54 @@
+.form {
+    max-width: 400px;
+    background: #1a1a1a; 
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.form input:not([type="checkbox"]),
+.form textarea,
+.form button {
+    width: 100%;
+    padding: 15px 12px; 
+    margin-bottom: 15px;
+    border: 0;
+    background-color: #222;
+    color: #fff;
+    outline: none;
+    font-size: 15px;
+    border-radius: 8px; 
+    box-sizing: border-box; 
+}
+
+.form input:not([type="checkbox"]):focus,
+.form textarea:focus {
+    background-color: #333;
+    box-shadow: 0 0 0 2px #007bff; 
+}
+
+.checkboxGroup {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #888;
+    font-size: 14px;
+}
+
+.form input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.form button {
+    background-color: #007bff; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0; 
+}
+
+.form button:hover {
+    transform: scale(1.05); 
+    background-color: #0056b3;
+}
